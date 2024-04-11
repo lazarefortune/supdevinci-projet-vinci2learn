@@ -1,0 +1,92 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id       Int   @id @default(autoincrement())
+  email    String   @unique
+  name     String?
+  password String
+  role     Role     @default(USER)
+  courses  Course[] @relation("UserCourses")
+  progress Progress[]
+  rankings Ranking[]
+  enrollments Enrollment[]
+  teachings Course[] @relation("CourseTeacher")
+}
+
+model Course {
+  id          Int   @id @default(autoincrement())
+  title       String
+  description String
+  teacherId   Int
+  lessons     Lesson[]
+  
+  enrollments Enrollment[]
+  students    User[]   @relation("UserCourses")
+  teacher     User     @relation("CourseTeacher", fields: [teacherId], references: [id])
+}
+
+model Lesson {
+  id        Int   @id @default(autoincrement())
+  title     String
+  content   String
+  courseId  Int
+  order     Int
+  progress  Progress[]
+
+  course    Course   @relation(fields: [courseId], references: [id])
+}
+
+model Enrollment {
+  id       Int   @id @default(autoincrement())
+  courseId Int
+  userId   Int
+  date     DateTime @default(now())
+  
+  course   Course @relation(fields: [courseId], references: [id])
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@unique([courseId, userId])
+}
+
+model Progress {
+  id        Int   @id @default(autoincrement())
+  userId    Int
+  lessonId  Int
+  date      DateTime @default(now())
+  status    ProgressStatus @default(NOT_STARTED)
+  xpEarned  Int @default(0)
+
+  user      User   @relation(fields: [userId], references: [id])
+  lesson    Lesson @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+}
+
+model Ranking {
+  id       Int   @id @default(autoincrement())
+  totalXP  Int
+  rank     Int
+  userId   Int
+
+  user     User   @relation(fields: [userId], references: [id])
+}
+
+enum Role {
+  USER
+  TEACHER
+  ADMIN
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
