@@ -4,9 +4,9 @@ services:
     image: postgres:13
     container_name: database
     environment:
-      POSTGRES_USER: env('DB_USER')
-      POSTGRES_PASSWORD: env('DB_PASSWORD')
-      POSTGRES_DB: env('DB_NAME')
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
       - "5433:5433"
