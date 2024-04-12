@@ -1,14 +1,24 @@
 "use client"
 import { useState, useEffect } from 'react'
 import CourseItem from "@/app/components/CourseItem";
+import Loader from "@/app/components/Loader";
 
 export default function CourseList() {
     const [courses, setCourses] = useState([])
+    const [loading, setLoading] = useState(true)
+
+
     useEffect(() => {
+        setLoading(true)
         fetch('/api/courses')
             .then(res => res.json())
-            .then(data => setCourses(data.courses))
+            .then(data => setCourses(data.courses)).
+            finally(() => setLoading(false))
     }, [])
+
+    if (loading) {
+        return <Loader />
+    }
 
     return (
         <div className="p-3">
