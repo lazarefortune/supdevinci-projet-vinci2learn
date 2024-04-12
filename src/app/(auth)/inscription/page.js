@@ -1,5 +1,5 @@
-import Register from "@/app/components/register.client";
+import RegisterForm from "@/app/components/RegisterForm";
 
-export default function SignupPage() {
-    return <Register />;
+export default function RegisterPage() {
+    return <RegisterForm />;
 }

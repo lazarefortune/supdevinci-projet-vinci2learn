@@ -9,16 +9,16 @@ datasource db {
 
 
 model User {
-  id       Int   @id @default(autoincrement())
-  email    String   @unique
-  name     String?
-  password String
-  role     Role     @default(USER)
-  courses  Course[] @relation("UserCourses")
-  progress Progress[]
-  rankings Ranking[]
+  id          Int   @id @default(autoincrement())
+  email       String   @unique
+  name        String?
+  password    String
+  role        Role     @default(USER)
+  courses     Course[] @relation("UserCourses")
+  progress    Progress[]
+  rankings    Ranking[]
   enrollments Enrollment[]
-  teachings Course[] @relation("CourseTeacher")
+  teachings   Course[] @relation("CourseTeacher")
 }
 
 model Course {
@@ -67,7 +67,7 @@ model Progress {
   user      User   @relation(fields: [userId], references: [id])
   lesson    Lesson @relation(fields: [lessonId], references: [id])
 
-  @@unique([userId, lessonId])
+  @@unique([ userId, lessonId ])
 }
 
 model Ranking {
